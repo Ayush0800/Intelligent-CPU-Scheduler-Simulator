@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from scheduling_algorithms import FCFS, SJF, RoundRobin, SRTF, Priority
+from Scheduling_algorithm import FCFS, SJF, RoundRobin, SRTF, Priority
 
 app = Flask(__name__)
 
