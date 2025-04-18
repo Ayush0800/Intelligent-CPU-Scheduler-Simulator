@@ -4,6 +4,10 @@ def calculate_metrics(timeline, processes):
     turnaround_time = {}
     waiting_time = {}
     
+    # Convert process IDs to strings for consistent handling
+    for t in timeline:
+        t['process'] = str(t['process'])
+    
     for t in timeline:
         if t['process'] not in completion_time:
             completion_time[t['process']] = t['end']
@@ -11,7 +15,7 @@ def calculate_metrics(timeline, processes):
             completion_time[t['process']] = max(completion_time[t['process']], t['end'])
     
     for p in processes:
-        pid = p['id']
+        pid = str(p['id'])  # Convert to string for consistent handling
         turnaround_time[pid] = completion_time[pid] - p['arrival_time']
         waiting_time[pid] = turnaround_time[pid] - p['burst_time']
     
@@ -26,7 +30,7 @@ def calculate_metrics(timeline, processes):
         'avg_turnaround_time': avg_turnaround,
         'avg_waiting_time': avg_waiting
     }
-#Alorithm of First come first Search
+
 def FCFS(processes):
     timeline = []
     current_time = 0
@@ -37,14 +41,14 @@ def FCFS(processes):
             current_time = p['arrival_time']
         
         timeline.append({
-            'process': p['id'],
+            'process': str(p['id']),  # Convert to string
             'start': current_time,
             'end': current_time + p['burst_time']
         })
         current_time += p['burst_time']
     
     return calculate_metrics(timeline, processes)
-#Alorithm of Shortest JOb First
+
 def SJF(processes):
     timeline = []
     current_time = 0
@@ -58,7 +62,7 @@ def SJF(processes):
         
         next_process = min(available, key=lambda x: x['burst_time'])
         timeline.append({
-            'process': next_process['id'],
+            'process': str(next_process['id']),  # Convert to string
             'start': current_time,
             'end': current_time + next_process['burst_time']
         })
@@ -66,11 +70,11 @@ def SJF(processes):
         remaining_processes.remove(next_process)
     
     return calculate_metrics(timeline, processes)
-#Alorithm of Round robin
+
 def RoundRobin(processes, quantum):
     timeline = []
     current_time = 0
-    remaining_processes = [(p['id'], p['burst_time'], p['arrival_time']) for p in processes]
+    remaining_processes = [(str(p['id']), p['burst_time'], p['arrival_time']) for p in processes]  # Convert ID to string
     
     while remaining_processes:
         available = [p for p in remaining_processes if p[2] <= current_time]
@@ -99,7 +103,7 @@ def RoundRobin(processes, quantum):
 def SRTF(processes):
     timeline = []
     current_time = 0
-    remaining_processes = [(p['id'], p['burst_time'], p['arrival_time'], p['burst_time']) for p in processes]
+    remaining_processes = [(str(p['id']), p['burst_time'], p['arrival_time'], p['burst_time']) for p in processes]  # Convert ID to string
     current_process = None
     start_time = current_time
     
@@ -142,11 +146,11 @@ def SRTF(processes):
             current_process = None
     
     return calculate_metrics(timeline, processes)
-#Alorithm of Priority 
+
 def Priority(processes):
     timeline = []
     current_time = 0
-    remaining_processes = [(p['id'], p['burst_time'], p['arrival_time'], p['priority']) for p in processes]
+    remaining_processes = [(str(p['id']), p['burst_time'], p['arrival_time'], p['priority']) for p in processes]  # Convert ID to string
     
     while remaining_processes:
         available = [p for p in remaining_processes if p[2] <= current_time]
